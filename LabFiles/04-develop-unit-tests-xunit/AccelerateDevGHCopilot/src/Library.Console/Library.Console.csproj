@@ -1,9 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Library.ApplicationCore\Library.ApplicationCore.csproj" />
-    <ProjectReference Include="..\Library.Infrastructure\Library.Infrastructure.csproj" />
-  </ItemGroup>
+</ItemGroup>
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>

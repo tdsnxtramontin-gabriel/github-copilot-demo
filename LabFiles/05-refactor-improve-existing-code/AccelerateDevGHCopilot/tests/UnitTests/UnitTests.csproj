@@ -21,14 +21,6 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Library.ApplicationCore\Library.ApplicationCore.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Library.Infrastructure\Library.Infrastructure.csproj" />
-  </ItemGroup>
-
     <ItemGroup>
         <None Include="..\..\src\Library.Console\Json\**\*">
             <Link>Json\%(RecursiveDir)%(FileName)%(Extension)</Link>
