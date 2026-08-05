@@ -4,7 +4,7 @@ from application_core.interfaces.ipatron_repository import IPatronRepository
 from application_core.interfaces.iloan_repository import ILoanRepository
 from application_core.interfaces.iloan_service import ILoanService
 from application_core.interfaces.ipatron_service import IPatronService
-from infrastructure.json_data import JsonData
+from application_core.interfaces.ibook_catalog import IBookCatalog
 
 class ConsoleApp:
     def __init__(
@@ -13,7 +13,7 @@ class ConsoleApp:
         patron_service: IPatronService,
         patron_repository: IPatronRepository,
         loan_repository: ILoanRepository,
-        json_data: JsonData,
+        book_catalog: IBookCatalog,
     ):
         self._current_state: ConsoleState = ConsoleState.PATRON_SEARCH
         self.matching_patrons = []
@@ -23,7 +23,7 @@ class ConsoleApp:
         self._loan_repository = loan_repository
         self._loan_service = loan_service
         self._patron_service = patron_service
-        self._json_data = json_data
+        self._book_catalog = book_catalog
         self._book_search_return_state: ConsoleState = ConsoleState.PATRON_SEARCH
 
     def _open_book_search(self, return_state: ConsoleState) -> ConsoleState:
@@ -31,18 +31,7 @@ class ConsoleApp:
         return ConsoleState.BOOK_SEARCH
 
     def _find_books_by_title(self, title_input: str):
-        normalized = title_input.strip().casefold()
-
-        exact_matches = [
-            book for book in self._json_data.books
-            if book.title.casefold() == normalized
-        ]
-        partial_matches = [
-            book for book in self._json_data.books
-            if normalized in book.title.casefold() and book not in exact_matches
-        ]
-
-        return exact_matches + partial_matches
+        return self._book_catalog.search_books_by_title(title_input)
 
     def _choose_book_from_matches(self, matches):
         print("Múltiplos livros correspondem à busca:")
@@ -62,31 +51,9 @@ class ConsoleApp:
             print("Entrada inválida. Tente novamente.")
 
     def _check_book_availability(self, book):
-        related_items = [book_item for book_item in self._json_data.book_items if book_item.book_id == book.id]
-        if not related_items:
-            return False, None, None
+        return self._book_catalog.get_book_availability(book.id)
 
-        related_item_ids = {book_item.id for book_item in related_items}
-        active_loans = [
-            loan for loan in self._json_data.loans
-            if loan.book_item_id in related_item_ids and loan.return_date is None
-        ]
-
-        active_item_ids = {loan.book_item_id for loan in active_loans}
-        available_item = next(
-            (book_item for book_item in related_items if book_item.id not in active_item_ids),
-            None,
-        )
-        if available_item is not None:
-            return True, None, available_item
-
-        active_loans_sorted = sorted(
-            active_loans,
-            key=lambda loan: loan.due_date if loan.due_date is not None else float("inf")
-        )
-        return False, active_loans_sorted[0] if active_loans_sorted else None, None
-
-    def _prompt_checkout_for_available_book(self, book, available_item) -> None:
+    def _prompt_checkout_for_available_book(self, available_item) -> None:
         patron = self.selected_patron_details
         if patron is None:
             print("Selecione um leitor antes de realizar um empréstimo.")
@@ -97,9 +64,15 @@ class ConsoleApp:
             if choice == 'n':
                 return
             if choice == 's':
-                new_loan = self._loan_service.checkout_loan(patron.id, available_item.id)
+                new_loan = self._loan_service.checkout_loan(
+                    patron.id,
+                    available_item.id,
+                )
                 if new_loan is None:
-                    print("Não foi possível concluir o empréstimo. O exemplar pode ter sido emprestado agora.")
+                    print(
+                        "Não foi possível concluir o empréstimo. "
+                        "O exemplar pode ter sido emprestado agora."
+                    )
                     return
 
                 self.selected_loan_details = self._loan_repository.get_loan(new_loan.id)
@@ -162,16 +135,16 @@ class ConsoleApp:
             return ConsoleState.PATRON_SEARCH
         print("Títulos correspondentes:")
         book_examples = [
-            ("Hábitos Atômicos"),
-            ("O Poder do Hábito"),
-            ("Padrões de Alta Performance"),
-            ("Os segredos da Mente Milionária"),
-            ("Cabeça de Campeão"),
-            ("O Homem Mais Rico da Babilônia"),
-            ("Pai Rico, Pai Pobre"),
-            ("Arquitetura Limpa"),
-            ("Código Limpo"),
-            ("Entendendo Algoritmos"),
+            "Hábitos Atômicos",
+            "O Poder do Hábito",
+            "Padrões de Alta Performance",
+            "Os segredos da Mente Milionária",
+            "Cabeça de Campeão",
+            "O Homem Mais Rico da Babilônia",
+            "Pai Rico, Pai Pobre",
+            "Arquitetura Limpa",
+            "Código Limpo",
+            "Entendendo Algoritmos",
         ]
         for idx, patron in enumerate(self.matching_patrons, 1):
             title = book_examples[(idx - 1) % len(book_examples)]
@@ -332,12 +305,18 @@ class ConsoleApp:
             is_available, blocking_loan, available_item = self._check_book_availability(book)
             if is_available:
                 print(f"{book.title} está disponível para empréstimo.")
-                self._prompt_checkout_for_available_book(book, available_item)
+                self._prompt_checkout_for_available_book(available_item)
             else:
                 if blocking_loan and blocking_loan.due_date is not None:
-                    print(f"{book.title} está emprestado para outro leitor. A data de devolução é {blocking_loan.due_date}.")
+                    print(
+                        f"{book.title} está emprestado para outro leitor. "
+                        f"A data de devolução é {blocking_loan.due_date}."
+                    )
                 else:
-                    print(f"{book.title} está emprestado para outro leitor. A data de devolução não está disponível.")
+                    print(
+                        f"{book.title} está emprestado para outro leitor. "
+                        "A data de devolução não está disponível."
+                    )
 
             if self._search_again_or_return():
                 continue

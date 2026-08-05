@@ -7,6 +7,7 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from application_core.services.loan_service import LoanService
 from application_core.services.patron_service import PatronService
 from infrastructure.json_data import JsonData
+from infrastructure.json_book_catalog import JsonBookCatalog
 from infrastructure.json_loan_repository import JsonLoanRepository
 from infrastructure.json_patron_repository import JsonPatronRepository
 from console.console_app import ConsoleApp
@@ -16,9 +17,10 @@ def main():
     json_data = JsonData()
     patron_repo = JsonPatronRepository(json_data)
     loan_repo = JsonLoanRepository(json_data)
+    book_catalog = JsonBookCatalog(json_data)
     loan_service = LoanService(loan_repo)
     patron_service = PatronService(patron_repo)
-    app = ConsoleApp(loan_service, patron_service, patron_repo, loan_repo, json_data=json_data)
+    app = ConsoleApp(loan_service, patron_service, patron_repo, loan_repo, book_catalog=book_catalog)
     app.run()
 
 if __name__ == "__main__":
