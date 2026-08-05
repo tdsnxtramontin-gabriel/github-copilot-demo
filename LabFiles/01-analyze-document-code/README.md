@@ -1,52 +1,77 @@
-# Lab 01: Analyze and Document Code
+# Library App
 
-## Overview
-This lab focuses on using GitHub Copilot to analyze existing code and generate comprehensive documentation. Learn how to leverage AI assistance to understand complex codebases quickly and create clear, maintainable documentation.
+## Description
+Library App is a Python-based console application for managing library operations such as catalog browsing, patron account activity, and loan processing. The project is organized with a layered architecture that separates domain logic, infrastructure concerns, user interaction, and tests.
 
-## Key Objectives
-- Analyze code structure and functionality using Copilot
-- Generate inline code comments and docstrings
-- Create high-level documentation
-- Identify code patterns and best practices
-- Improve code readability through intelligent documentation
+## Project Structure
+- README.md
+- requirements.txt
+- library/
+   - application_core/
+      - entities/
+         - author.py
+         - book.py
+         - book_item.py
+         - loan.py
+         - patron.py
+      - enums/
+         - loan_extension_status.py
+         - loan_return_status.py
+         - membership_renewal_status.py
+      - interfaces/
+         - iloan_repository.py
+         - iloan_service.py
+         - ipatron_repository.py
+         - ipatron_service.py
+      - services/
+         - loan_service.py
+         - patron_service.py
+   - console/
+      - common_actions.py
+      - console_app.py
+      - console_state.py
+      - main.py
+   - infrastructure/
+      - Json/
+         - Authors.json
+         - BookItems.json
+         - Books.json
+         - Loans.json
+         - Patrons.json
+      - json_data.py
+      - json_loan_repository.py
+      - json_patron_repository.py
+   - tests/
+      - test_loan_service.py
+      - test_patron_service.py
 
-## Lab Structure
-```
-library/
-├── application_core/        # Core business logic
-│   ├── entities/           # Domain models
-│   ├── enums/              # Enumeration types
-│   ├── interfaces/         # Interface contracts
-│   └── services/           # Business services
-├── console/                # UI/Console application
-├── infrastructure/         # Data access and external services
-└── tests/                  # Unit tests
-```
+## Key Classes and Interfaces
+- Domain entities:
+   - `Author`, `Book`, `BookItem`, `Loan`, and `Patron` in `library/application_core/entities` model the core library domain.
+- Service interfaces:
+   - `ILoanService` and `IPatronService` define service-level contracts in `library/application_core/interfaces`.
+- Repository interfaces:
+   - `ILoanRepository` and `IPatronRepository` define persistence contracts in `library/application_core/interfaces`.
+- Business services:
+   - `LoanService` and `PatronService` in `library/application_core/services` implement core use cases.
+- Infrastructure repositories:
+   - JSON-backed repository implementations in `library/infrastructure` provide data access.
+- Console entry point:
+   - `library/console/main.py` starts the interactive console workflow.
 
-## Concepts Demonstrated
-- Code analysis techniques
-- Documentation generation
-- Docstring patterns
-- API documentation
-- Code commenting best practices
+## Usage
+1. Install dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+2. Run the console app:
+    ```bash
+    python library/console/main.py
+    ```
+3. Run tests:
+    ```bash
+    pytest library/tests
+    ```
 
-## Getting Started
-1. Navigate to the lab directory
-2. Review the `library/` folder structure
-3. Use GitHub Copilot to:
-   - Analyze existing code functionality
-   - Generate missing documentation
-   - Create comprehensive README files
-   - Document public APIs
-
-## Expected Outcomes
-- Fully documented codebase
-- Clear understanding of code structure
-- Generated documentation files
-- Improved code maintainability
-
-## Related Concepts
-- Code analysis
-- API documentation
-- Technical writing
-- Code readability
+## License
+This project is provided for educational and training purposes.
