@@ -77,7 +77,7 @@ A comprehensive learning repository demonstrating professional software developm
 - **Lab 08**: Profile and optimize application performance
 - **Lab 09**: Specification-driven development practices
 
-## 🎯 Key Concepts
+## Key Concepts
 
 ### Code Analysis
 ```
