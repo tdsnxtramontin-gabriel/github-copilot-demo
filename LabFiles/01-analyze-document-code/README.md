@@ -59,19 +59,5 @@ Library App is a Python-based console application for managing library operation
 - Console entry point:
    - `library/console/main.py` starts the interactive console workflow.
 
-## Usage
-1. Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-2. Run the console app:
-    ```bash
-    python library/console/main.py
-    ```
-3. Run tests:
-    ```bash
-    pytest library/tests
-    ```
-
 ## License
 This project is provided for educational and training purposes.
