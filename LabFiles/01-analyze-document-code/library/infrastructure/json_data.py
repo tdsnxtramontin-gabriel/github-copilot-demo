@@ -11,12 +11,12 @@ from datetime import datetime
 
 class JsonData:
     def __init__(self):
-        # Get the absolute path to the project root
+        # Obtém o caminho absoluto para a raiz do projeto.
         self.project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         self.json_dir = os.path.join(self.project_root, "infrastructure", "Json")
         self.authors_path = os.path.join(self.json_dir, "Authors.json")
         self.books_path = os.path.join(self.json_dir, "Books.json")
-        self.book_items_path = os.path.join(self.json_dir, "BookItems.json")  # <-- Add this line
+        self.book_items_path = os.path.join(self.json_dir, "BookItems.json")
         self.patrons_path = os.path.join(self.json_dir, "Patrons.json")
         self.loans_path = os.path.join(self.json_dir, "Loans.json")
         self.authors: List[Author] = []
@@ -40,7 +40,7 @@ class JsonData:
             with open(self.books_path, encoding='utf-8') as f:
                 books_data = json.load(f)
                 self.books = [Book(id=b['Id'], title=b['Title'], author_id=b['AuthorId'], genre=b['Genre'], image_name=b['ImageName'], isbn=b['ISBN']) for b in books_data]
-            with open(self.book_items_path, encoding='utf-8') as f:  # <-- Fix here
+            with open(self.book_items_path, encoding='utf-8') as f:
                 items_data = json.load(f)
                 self.book_items = [BookItem(id=bi['Id'], book_id=bi['BookId'], acquisition_date=self._parse_datetime(bi['AcquisitionDate']), condition=bi.get('Condition')) for bi in items_data]
             with open(self.patrons_path, encoding='utf-8') as f:
@@ -51,13 +51,13 @@ class JsonData:
                 self.loans = [Loan(id=l['Id'], book_item_id=l['BookItemId'], patron_id=l['PatronId'], loan_date=self._parse_datetime(l['LoanDate']), due_date=self._parse_datetime(l['DueDate']), return_date=self._parse_datetime(l['ReturnDate'])) for l in loans_data]
             self._loaded = True
 
-            # Build lookup dictionaries for fast access
+            # Cria dicionários de consulta para acesso rápido.
             book_item_dict = {bi.id: bi for bi in self.book_items}
             book_dict = {b.id: b for b in self.books}
             author_dict = {a.id: a for a in self.authors}
             patron_dict = {p.id: p for p in self.patrons}
 
-            # Link book_item and book to each loan
+            # Vincula book_item e book a cada empréstimo.
             for loan in self.loans:
                 loan.book_item = book_item_dict.get(loan.book_item_id)
                 if loan.book_item:
@@ -65,12 +65,12 @@ class JsonData:
                     if loan.book_item.book:
                         loan.book_item.book.author = author_dict.get(loan.book_item.book.author_id)
                 loan.patron = patron_dict.get(loan.patron_id)
-            # Optionally, link loans to patrons
+            # Opcionalmente, vincula empréstimos aos leitores.
             for patron in self.patrons:
                 patron.loans = [loan for loan in self.loans if loan.patron_id == patron.id]
 
         except (FileNotFoundError, json.JSONDecodeError) as e:
-            print(f"Error loading data: {e}")
+            print(f"Erro ao carregar os dados: {e}")
             self._loaded = False
 
     def save_loans(self, loans: List[Loan]) -> None:
@@ -87,7 +87,7 @@ class JsonData:
                     } for l in loans
                 ], f, indent=2)
         except Exception as e:
-            print(f"Error saving loans: {e}")
+            print(f"Erro ao salvar os empréstimos: {e}")
 
     def save_patrons(self, patrons: List[Patron]) -> None:
         try:
@@ -102,4 +102,4 @@ class JsonData:
                     } for p in patrons
                 ], f, indent=2)
         except Exception as e:
-            print(f"Error saving patrons: {e}")
+            print(f"Erro ao salvar os leitores: {e}")

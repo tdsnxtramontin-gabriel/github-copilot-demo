@@ -1,7 +1,7 @@
 from enum import Enum
 
 class LoanReturnStatus(Enum):
-    SUCCESS = 'Book was successfully returned.'
-    LOAN_NOT_FOUND = 'Loan not found.'
-    ALREADY_RETURNED = 'Cannot return book as the book is already returned.'
-    ERROR = 'Cannot return book due to an error.'
+    SUCCESS = 'Livro devolvido com sucesso.'
+    LOAN_NOT_FOUND = 'Empréstimo não encontrado.'
+    ALREADY_RETURNED = 'Não é possível devolver o livro porque ele já foi devolvido.'
+    ERROR = 'Não é possível devolver o livro devido a um erro.'

@@ -1,9 +1,9 @@
-# Library App
+# Aplicativo da Biblioteca
 
-## Description
-Library App is a Python-based console application for managing library operations such as catalog browsing, patron account activity, and loan processing. The project is organized with a layered architecture that separates domain logic, infrastructure concerns, user interaction, and tests.
+## Descrição
+Aplicativo da Biblioteca é uma aplicação de console em Python para gerenciar operações de biblioteca, como navegação no catálogo, atividade da conta de leitores e processamento de empréstimos. O projeto é organizado com uma arquitetura em camadas que separa a lógica de domínio, as preocupações de infraestrutura, a interação com o usuário e os testes.
 
-## Project Structure
+## Estrutura do Projeto
 - README.md
 - requirements.txt
 - library/
@@ -45,19 +45,19 @@ Library App is a Python-based console application for managing library operation
       - test_loan_service.py
       - test_patron_service.py
 
-## Key Classes and Interfaces
-- Domain entities:
-   - `Author`, `Book`, `BookItem`, `Loan`, and `Patron` in `library/application_core/entities` model the core library domain.
-- Service interfaces:
-   - `ILoanService` and `IPatronService` define service-level contracts in `library/application_core/interfaces`.
-- Repository interfaces:
-   - `ILoanRepository` and `IPatronRepository` define persistence contracts in `library/application_core/interfaces`.
-- Business services:
-   - `LoanService` and `PatronService` in `library/application_core/services` implement core use cases.
-- Infrastructure repositories:
-   - JSON-backed repository implementations in `library/infrastructure` provide data access.
-- Console entry point:
-   - `library/console/main.py` starts the interactive console workflow.
+## Principais Classes e Interfaces
+- Entidades de domínio:
+   - `Author`, `Book`, `BookItem`, `Loan` e `Patron` em `library/application_core/entities` modelam o domínio central da biblioteca.
+- Interfaces de serviço:
+   - `ILoanService` e `IPatronService` definem os contratos de serviço em `library/application_core/interfaces`.
+- Interfaces de repositório:
+   - `ILoanRepository` e `IPatronRepository` definem os contratos de persistência em `library/application_core/interfaces`.
+- Serviços de negócio:
+   - `LoanService` e `PatronService` em `library/application_core/services` implementam os principais casos de uso.
+- Repositórios de infraestrutura:
+   - As implementações de repositório baseadas em JSON em `library/infrastructure` fornecem acesso aos dados.
+- Ponto de entrada do console:
+   - `library/console/main.py` inicia o fluxo interativo do console.
 
-## License
-This project is provided for educational and training purposes.
+## Licença
+Este projeto é fornecido para fins educacionais e de treinamento.

@@ -10,3 +10,11 @@ class ILoanRepository(ABC):
     @abstractmethod
     def update_loan(self, loan: Loan) -> None:
         pass
+
+    @abstractmethod
+    def get_loans(self) -> list[Loan]:
+        pass
+
+    @abstractmethod
+    def add_loan(self, loan: Loan) -> Loan:
+        pass

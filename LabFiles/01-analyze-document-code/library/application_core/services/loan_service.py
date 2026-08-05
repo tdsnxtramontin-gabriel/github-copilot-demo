@@ -1,7 +1,9 @@
 from ..interfaces.iloan_service import ILoanService
 from ..interfaces.iloan_repository import ILoanRepository
+from ..entities.loan import Loan
 from ..enums.loan_return_status import LoanReturnStatus
 from ..enums.loan_extension_status import LoanExtensionStatus
+from typing import Optional
 from datetime import datetime, timedelta
 
 class LoanService(ILoanService):
@@ -39,3 +41,24 @@ class LoanService(ILoanService):
             return LoanExtensionStatus.SUCCESS
         except Exception:
             return LoanExtensionStatus.ERROR
+
+    def checkout_loan(self, patron_id: int, book_item_id: int) -> Optional[Loan]:
+        loans = self._loan_repository.get_loans()
+        has_active_loan = any(
+            loan.book_item_id == book_item_id and loan.return_date is None
+            for loan in loans
+        )
+        if has_active_loan:
+            return None
+
+        next_id = max((loan.id for loan in loans), default=0) + 1
+        now = datetime.now()
+        new_loan = Loan(
+            id=next_id,
+            book_item_id=book_item_id,
+            patron_id=patron_id,
+            loan_date=now,
+            due_date=now + timedelta(days=self.EXTEND_BY_DAYS),
+            return_date=None,
+        )
+        return self._loan_repository.add_loan(new_loan)

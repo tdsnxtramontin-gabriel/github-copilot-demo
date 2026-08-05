@@ -1,8 +1,8 @@
 from enum import Enum
 
 class MembershipRenewalStatus(Enum):
-    SUCCESS = 'Membership renewal was successful.'
-    PATRON_NOT_FOUND = 'Patron not found.'
-    TOO_EARLY_TO_RENEW = 'It is too early to renew the membership.'
-    LOAN_NOT_RETURNED = 'Cannot renew membership due to an outstanding loan.'
-    ERROR = 'Cannot renew membership due to an error.'
+    SUCCESS = 'A renovação da assinatura foi concluída com sucesso.'
+    PATRON_NOT_FOUND = 'Leitor não encontrado.'
+    TOO_EARLY_TO_RENEW = 'Ainda é cedo para renovar a assinatura.'
+    LOAN_NOT_RETURNED = 'Não é possível renovar a assinatura devido a um empréstimo pendente.'
+    ERROR = 'Não é possível renovar a assinatura devido a um erro.'

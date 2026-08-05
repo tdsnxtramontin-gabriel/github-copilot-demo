@@ -5,4 +5,5 @@ class ConsoleState(Enum):
     PATRON_SEARCH_RESULTS = 2
     PATRON_DETAILS = 3
     LOAN_DETAILS = 4
-    QUIT = 5
+    BOOK_SEARCH = 5
+    QUIT = 6

@@ -1,7 +1,7 @@
 import sys
 from pathlib import Path
 
-# Add the parent directory to sys.path
+# Adiciona o diretório pai ao sys.path.
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
 from application_core.services.loan_service import LoanService
@@ -18,7 +18,7 @@ def main():
     loan_repo = JsonLoanRepository(json_data)
     loan_service = LoanService(loan_repo)
     patron_service = PatronService(patron_repo)
-    app = ConsoleApp(loan_service, patron_service, patron_repo, loan_repo)
+    app = ConsoleApp(loan_service, patron_service, patron_repo, loan_repo, json_data=json_data)
     app.run()
 
 if __name__ == "__main__":
