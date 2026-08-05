@@ -1,6 +1,10 @@
 # Build Folders
 [Bb]in/
 [Oo]bj/
+**/bin/
+**/obj/
+**/bin/*
+**/obj/*
 
 # Mstest test results
 TestResults
